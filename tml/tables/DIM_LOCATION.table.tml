@@ -1,0 +1,58 @@
+table:
+  name: DIM_LOCATION
+  db: ts_agent_demo
+  schema: hr_payroll
+  db_table: dim_location
+  connection:
+    name: Databricks MV
+  columns:
+  - name: LOCATION_ID
+    db_column_name: location_id
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: INT64
+  - name: LOCATION_NAME
+    db_column_name: location_name
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: VARCHAR
+  - name: CITY
+    db_column_name: city
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: VARCHAR
+  - name: STATE
+    db_column_name: state
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: VARCHAR
+  - name: COUNTRY
+    db_column_name: country
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: VARCHAR
+  - name: REGION
+    db_column_name: region
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: VARCHAR
+  - name: POSTAL_CODE
+    db_column_name: postal_code
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: VARCHAR
+  - name: IS_REMOTE
+    db_column_name: is_remote
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: BOOL
+  spotter_config:
+    is_spotter_enabled: false

@@ -1,0 +1,56 @@
+table:
+  name: DIM_JOB_TITLE
+  db: ts_agent_demo
+  schema: hr_payroll
+  db_table: dim_job_title
+  connection:
+    name: Databricks MV
+  columns:
+  - name: JOB_TITLE_ID
+    db_column_name: job_title_id
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: INT64
+  - name: JOB_TITLE
+    db_column_name: job_title
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: VARCHAR
+  - name: JOB_LEVEL
+    db_column_name: job_level
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: VARCHAR
+  - name: JOB_FAMILY
+    db_column_name: job_family
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: VARCHAR
+  - name: MIN_SALARY
+    db_column_name: min_salary
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: MAX_SALARY
+    db_column_name: max_salary
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: IS_EXEMPT
+    db_column_name: is_exempt
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: BOOL
+  spotter_config:
+    is_spotter_enabled: false

@@ -1,0 +1,318 @@
+model:
+  name: PAYROLL_MODEL
+  description: "HR Payroll model from Databricks UC Metric View PAYROLL_MV. Net Pay is the canonical compensation metric."
+  model_tables:
+  - name: FACT_PAYROLL
+    joins:
+    - with: DIM_EMPLOYEE
+      'on': '[FACT_PAYROLL::EMPLOYEE_ID] = [DIM_EMPLOYEE::EMPLOYEE_ID]'
+      type: INNER
+      cardinality: MANY_TO_ONE
+    - with: DIM_DEPARTMENT
+      'on': '[FACT_PAYROLL::DEPARTMENT_ID] = [DIM_DEPARTMENT::DEPARTMENT_ID]'
+      type: INNER
+      cardinality: MANY_TO_ONE
+    - with: DIM_JOB_TITLE
+      'on': '[FACT_PAYROLL::JOB_TITLE_ID] = [DIM_JOB_TITLE::JOB_TITLE_ID]'
+      type: INNER
+      cardinality: MANY_TO_ONE
+    - with: DIM_LOCATION
+      'on': '[FACT_PAYROLL::LOCATION_ID] = [DIM_LOCATION::LOCATION_ID]'
+      type: INNER
+      cardinality: MANY_TO_ONE
+    - with: DIM_PAY_PERIOD
+      'on': '[FACT_PAYROLL::PAY_PERIOD_ID] = [DIM_PAY_PERIOD::PAY_PERIOD_ID]'
+      type: INNER
+      cardinality: MANY_TO_ONE
+  - name: DIM_EMPLOYEE
+  - name: DIM_DEPARTMENT
+  - name: DIM_JOB_TITLE
+  - name: DIM_LOCATION
+  - name: DIM_PAY_PERIOD
+  formulas:
+  - id: formula_Gross Pay
+    name: Gross Pay
+    expr: "sum ( [FACT_PAYROLL::GROSS_PAY] )"
+  - id: formula_Net Pay
+    name: Net Pay
+    expr: "sum ( [FACT_PAYROLL::NET_PAY] )"
+  - id: formula_Total Tax
+    name: Total Tax
+    expr: "sum ( [FACT_PAYROLL::FEDERAL_TAX] + [FACT_PAYROLL::STATE_TAX] + [FACT_PAYROLL::SOCIAL_SECURITY] + [FACT_PAYROLL::MEDICARE] )"
+  - id: formula_Total Deductions
+    name: Total Deductions
+    expr: "sum ( [FACT_PAYROLL::HEALTH_INSURANCE_DEDUCTION] + [FACT_PAYROLL::RETIREMENT_401K_DEDUCTION] + [FACT_PAYROLL::OTHER_DEDUCTIONS] )"
+  - id: formula_Headcount
+    name: Headcount
+    expr: "unique count ( [FACT_PAYROLL::EMPLOYEE_ID] )"
+  - id: formula_Avg Gross Pay
+    name: Avg Gross Pay
+    expr: "[formula_Gross Pay] / [formula_Headcount]"
+  - id: formula_Tax Burden Pct
+    name: Tax Burden Pct
+    expr: "[formula_Total Tax] / [formula_Gross Pay] * 100"
+  columns:
+  - name: Gross Pay
+    formula_id: formula_Gross Pay
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+      synonyms:
+      - Total Compensation
+      - Gross Salary
+      synonym_type: AUTO_GENERATED
+      ai_context: "Total gross compensation before taxes and deductions."
+  - name: Net Pay
+    formula_id: formula_Net Pay
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+      synonyms:
+      - Take Home Pay
+      - Net Salary
+      synonym_type: AUTO_GENERATED
+      ai_context: "Net compensation after all taxes and deductions. This is the canonical pay metric."
+  - name: Total Tax
+    formula_id: formula_Total Tax
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+      synonyms:
+      - Tax Amount
+      - Taxes Paid
+      synonym_type: AUTO_GENERATED
+      ai_context: "Combined federal, state, social security, and medicare tax withholdings."
+  - name: Total Deductions
+    formula_id: formula_Total Deductions
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+      synonyms:
+      - Benefits Deductions
+      - Withholdings
+      synonym_type: AUTO_GENERATED
+      ai_context: "Combined health insurance, 401k, and other pre-tax deductions."
+  - name: Headcount
+    formula_id: formula_Headcount
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+      synonyms:
+      - Employee Count
+      - FTE Count
+      synonym_type: AUTO_GENERATED
+      ai_context: "Count of distinct employees with payroll records."
+  - name: Avg Gross Pay
+    formula_id: formula_Avg Gross Pay
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+      synonyms:
+      - Average Salary
+      - Pay Per Employee
+      synonym_type: AUTO_GENERATED
+      ai_context: "Average gross pay per employee (total gross / headcount)."
+  - name: Tax Burden Pct
+    formula_id: formula_Tax Burden Pct
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+      synonyms:
+      - Effective Tax Rate
+      - Tax Percentage
+      synonym_type: AUTO_GENERATED
+      ai_context: "Effective tax rate as percentage of gross pay."
+  - name: Base Pay
+    column_id: FACT_PAYROLL::BASE_PAY
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+      synonyms:
+      - Base Salary
+      - Regular Pay
+      synonym_type: AUTO_GENERATED
+      ai_context: "Base compensation excluding overtime and bonuses."
+  - name: Overtime Pay
+    column_id: FACT_PAYROLL::OVERTIME_PAY
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+      synonyms:
+      - OT Pay
+      - Extra Hours Pay
+      synonym_type: AUTO_GENERATED
+      ai_context: "Additional compensation for hours worked beyond standard schedule."
+  - name: Bonus Pay
+    column_id: FACT_PAYROLL::BONUS_PAY
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+      synonyms:
+      - Bonus
+      - Incentive Pay
+      synonym_type: AUTO_GENERATED
+      ai_context: "Performance bonuses and incentive compensation."
+  - name: Regular Hours
+    column_id: FACT_PAYROLL::REGULAR_HOURS
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+      synonyms:
+      - Standard Hours
+      - Normal Hours
+      synonym_type: AUTO_GENERATED
+      ai_context: "Standard working hours logged per pay period."
+  - name: Overtime Hours
+    column_id: FACT_PAYROLL::OVERTIME_HOURS
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+      synonyms:
+      - OT Hours
+      - Extra Hours
+      synonym_type: AUTO_GENERATED
+      ai_context: "Hours worked beyond standard schedule per pay period."
+  - name: Department Name
+    column_id: DIM_DEPARTMENT::DEPARTMENT_NAME
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - Department
+      - Dept
+      synonym_type: AUTO_GENERATED
+      ai_context: "Organizational department the employee belongs to."
+  - name: Job Title
+    column_id: DIM_JOB_TITLE::JOB_TITLE
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - Title
+      - Position
+      synonym_type: AUTO_GENERATED
+      ai_context: "Employee job title and role designation."
+  - name: Job Level
+    column_id: DIM_JOB_TITLE::JOB_LEVEL
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - Level
+      - Seniority
+      synonym_type: AUTO_GENERATED
+      ai_context: "Career level within the job family hierarchy."
+  - name: Job Family
+    column_id: DIM_JOB_TITLE::JOB_FAMILY
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - Function
+      - Job Category
+      synonym_type: AUTO_GENERATED
+      ai_context: "Functional job family grouping related roles."
+  - name: Location Name
+    column_id: DIM_LOCATION::LOCATION_NAME
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - Office
+      - Site
+      synonym_type: AUTO_GENERATED
+      ai_context: "Physical office or work site location."
+  - name: City
+    column_id: DIM_LOCATION::CITY
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - Office City
+      - Work City
+      synonym_type: AUTO_GENERATED
+      ai_context: "City where the office is located."
+  - name: State
+    column_id: DIM_LOCATION::STATE
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - Office State
+      - Work State
+      synonym_type: AUTO_GENERATED
+      ai_context: "State or province of the work location."
+  - name: Region
+    column_id: DIM_LOCATION::REGION
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - Geographic Region
+      - Area
+      synonym_type: AUTO_GENERATED
+      ai_context: "Broad geographic region for regional compensation analysis."
+  - name: Employment Status
+    column_id: DIM_EMPLOYEE::EMPLOYMENT_STATUS
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - Status
+      - Active or Inactive
+      synonym_type: AUTO_GENERATED
+      ai_context: "Current employment status (Active, Terminated, On Leave, etc)."
+  - name: Gender
+    column_id: DIM_EMPLOYEE::GENDER
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - Sex
+      - Employee Gender
+      synonym_type: AUTO_GENERATED
+      ai_context: "Employee gender for diversity and equity analysis."
+  - name: Pay Date
+    column_id: DIM_PAY_PERIOD::PAY_DATE
+    properties:
+      column_type: ATTRIBUTE
+      index_type: DONT_INDEX
+      synonyms:
+      - Payment Date
+      - Payday
+      synonym_type: AUTO_GENERATED
+      ai_context: "Date when payroll was disbursed to employees."
+  - name: Pay Frequency
+    column_id: DIM_PAY_PERIOD::PAY_FREQUENCY
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - Pay Cycle
+      - Payment Frequency
+      synonym_type: AUTO_GENERATED
+      ai_context: "How often employees are paid (weekly, bi-weekly, monthly)."
+  - name: Fiscal Year
+    column_id: DIM_PAY_PERIOD::FISCAL_YEAR
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - FY
+      - Year
+      synonym_type: AUTO_GENERATED
+      ai_context: "Fiscal year of the pay period for annual budget analysis."
+  - name: Fiscal Quarter
+    column_id: DIM_PAY_PERIOD::FISCAL_QUARTER
+    properties:
+      column_type: ATTRIBUTE
+      synonyms:
+      - FQ
+      - Quarter
+      synonym_type: AUTO_GENERATED
+      ai_context: "Fiscal quarter for quarterly compensation reporting."
+  properties:
+    is_bypass_rls: false
+    join_progressive: true
+    spotter_config:
+      is_spotter_enabled: true

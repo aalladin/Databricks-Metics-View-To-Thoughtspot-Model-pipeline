@@ -1,0 +1,40 @@
+table:
+  name: DIM_DEPARTMENT
+  db: ts_agent_demo
+  schema: hr_payroll
+  db_table: dim_department
+  connection:
+    name: Databricks MV
+  columns:
+  - name: DEPARTMENT_ID
+    db_column_name: department_id
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: INT64
+  - name: DEPARTMENT_NAME
+    db_column_name: department_name
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: VARCHAR
+  - name: DEPARTMENT_HEAD
+    db_column_name: department_head
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: VARCHAR
+  - name: COST_CENTER
+    db_column_name: cost_center
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: VARCHAR
+  - name: PARENT_DEPARTMENT_ID
+    db_column_name: parent_department_id
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: INT64
+  spotter_config:
+    is_spotter_enabled: false

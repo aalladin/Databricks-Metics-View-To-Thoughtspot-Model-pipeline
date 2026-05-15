@@ -1,0 +1,164 @@
+table:
+  name: FACT_PAYROLL
+  db: ts_agent_demo
+  schema: hr_payroll
+  db_table: fact_payroll
+  connection:
+    name: Databricks MV
+  columns:
+  - name: PAYROLL_ID
+    db_column_name: payroll_id
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: INT64
+  - name: EMPLOYEE_ID
+    db_column_name: employee_id
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: INT64
+  - name: PAY_PERIOD_ID
+    db_column_name: pay_period_id
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: INT64
+  - name: DEPARTMENT_ID
+    db_column_name: department_id
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: INT64
+  - name: JOB_TITLE_ID
+    db_column_name: job_title_id
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: INT64
+  - name: LOCATION_ID
+    db_column_name: location_id
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: INT64
+  - name: DATE_KEY
+    db_column_name: date_key
+    properties:
+      column_type: ATTRIBUTE
+    db_column_properties:
+      data_type: INT64
+  - name: GROSS_PAY
+    db_column_name: gross_pay
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: BASE_PAY
+    db_column_name: base_pay
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: OVERTIME_PAY
+    db_column_name: overtime_pay
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: BONUS_PAY
+    db_column_name: bonus_pay
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: FEDERAL_TAX
+    db_column_name: federal_tax
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: STATE_TAX
+    db_column_name: state_tax
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: SOCIAL_SECURITY
+    db_column_name: social_security
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: MEDICARE
+    db_column_name: medicare
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: HEALTH_INSURANCE_DEDUCTION
+    db_column_name: health_insurance_deduction
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: RETIREMENT_401K_DEDUCTION
+    db_column_name: retirement_401k_deduction
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: OTHER_DEDUCTIONS
+    db_column_name: other_deductions
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: NET_PAY
+    db_column_name: net_pay
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: OVERTIME_HOURS
+    db_column_name: overtime_hours
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  - name: REGULAR_HOURS
+    db_column_name: regular_hours
+    properties:
+      column_type: MEASURE
+      aggregation: SUM
+      index_type: DONT_INDEX
+    db_column_properties:
+      data_type: DOUBLE
+  spotter_config:
+    is_spotter_enabled: false
