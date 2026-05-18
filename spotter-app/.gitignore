@@ -1,0 +1,3 @@
+# Never commit credentials
+app.yaml.local
+*.secret

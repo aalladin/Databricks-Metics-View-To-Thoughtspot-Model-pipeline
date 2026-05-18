@@ -1,0 +1,16 @@
+command:
+  - streamlit
+  - run
+  - app.py
+
+env:
+  - name: TS_BASE_URL
+    value: "https://YOUR_INSTANCE.thoughtspot.cloud"
+  - name: TS_MODEL
+    value: "PAYROLL_MODEL"
+  - name: TS_USERNAME
+    value: "tsadmin"
+  - name: TS_PASSWORD
+    value: "SET_IN_DATABRICKS_APP_CONFIG"
+  - name: STREAMLIT_GATHER_USAGE_STATS
+    value: "false"
